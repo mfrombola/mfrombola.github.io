@@ -22,16 +22,29 @@
     </style>
 </head>
 <body>
-    <div id="app" class="max-w-lg w-full p-8 bg-white rounded-2xl shadow-lg">
+    <div id="app" class="max-w-lg w-full p-8 bg-gray-100 rounded-2xl shadow-lg text-black">
         <div class="flex justify-center gap-4 mb-6">
-            <button id="hourlyToAnnual" class="bg-purple-700 text-white py-2 px-4 rounded-lg">💰 Hourly to Annual</button>
-            <button id="annualToHourly" class="bg-white text-purple-700 border border-purple-300 py-2 px-4 rounded-lg">📅 Annual to Hourly</button>
+            <button id="hourlyToAnnual" class="bg-purple-700 text-white py-2 px-4 rounded-lg hover:bg-purple-800 active:bg-purple-900 transition-all font-bold text-base shadow-md">💰 Hourly to Annual</button>
+            <button id="annualToHourly" class="bg-white text-purple-700 border border-purple-300 py-2 px-4 rounded-lg hover:bg-purple-700 hover:text-white active:bg-purple-800 active:text-white transition-all font-bold text-base shadow-md">📅 Annual to Hourly</button>
         </div>
         <div id="inputFields" class="space-y-4">
+            <label for="currency" class="block text-sm font-bold text-gray-700">💲 Select Currency:</label>
+            <select id="currency" class="w-full p-2 rounded-lg border border-purple-300 text-black">
+                <option value="$">USD ($)</option>
+                <option value="€">EUR (€)</option>
+                <option value="£">GBP (£)</option>
+                <option value="¥">JPY (¥)</option>
+                <option value="R$">BRL (R$)</option>
+                <option value="₹">INR (₹)</option>
+                <option value="C$">CAD (C$)</option>
+                <option value="AU$">AUD (AU$)</option>
+                <option value="CHF">CHF (CHF)</option>
+                <option value="¥">CNY (¥)</option>
+            </select>
             <input id="hourlyRate" placeholder="💵 Hourly Rate (e.g. 20)" class="w-full p-2 rounded-lg border border-purple-300 text-black" />
             <input id="vacationDays" placeholder="🏖️ Vacation Days (e.g. 20)" class="w-full p-2 rounded-lg border border-purple-300 text-black" />
             <button id="calculate" class="w-full bg-purple-700 text-white py-2 rounded-lg">🔄 Calculate</button>
-            <p id="result" class="mt-4 text-lg text-black"></p>
+            <p id="result" class="mt-4 text-base text-black"></p>
             <p id="billableHours" class="text-md text-gray-700"></p>
         </div>
     </div>
@@ -40,32 +53,33 @@
 
         document.getElementById('hourlyToAnnual').addEventListener('click', () => {
             mode = 'hourlyToAnnual';
-            document.getElementById('hourlyToAnnual').classList.add('bg-purple-700', 'text-white');
+            document.getElementById('hourlyToAnnual').classList.add('bg-purple-200', 'text-purple-900', 'font-bold', 'hover:bg-purple-300', 'active:bg-purple-400');
             document.getElementById('annualToHourly').classList.remove('bg-purple-700', 'text-white');
-            document.getElementById('annualToHourly').classList.add('bg-white', 'text-purple-700');
+            document.getElementById('annualToHourly').classList.add('bg-white', 'text-purple-700', 'hover:bg-purple-100', 'active:bg-purple-200');
             document.getElementById('hourlyRate').placeholder = "💵 Hourly Rate (e.g. 20)";
         });
 
         document.getElementById('annualToHourly').addEventListener('click', () => {
             mode = 'annualToHourly';
-            document.getElementById('annualToHourly').classList.add('bg-purple-700', 'text-white');
+            document.getElementById('annualToHourly').classList.add('bg-purple-200', 'text-purple-900', 'font-bold', 'hover:bg-purple-300', 'active:bg-purple-400');
             document.getElementById('hourlyToAnnual').classList.remove('bg-purple-700', 'text-white');
-            document.getElementById('hourlyToAnnual').classList.add('bg-white', 'text-purple-700');
+            document.getElementById('hourlyToAnnual').classList.add('bg-white', 'text-purple-700', 'hover:bg-purple-100', 'active:bg-purple-200');
             document.getElementById('hourlyRate').placeholder = "💰 Annual Value (e.g. 50,000)";
         });
 
         document.getElementById('calculate').addEventListener('click', () => {
-            const hourlyRate = parseFloat(document.getElementById('hourlyRate').value.replace(/,/g, '')) || 0;
+            const hourlyRate = parseFloat(document.getElementById('hourlyRate').value.replace(/[,$]/g, '')) || 0;
             const vacationDays = parseFloat(document.getElementById('vacationDays').value) || 0;
             const workHours = 2080 - (vacationDays * 8);
             const monthlyHours = Math.ceil(workHours / 12);
+            const currencySymbol = document.getElementById('currency').value;
             let result = '';
             if (mode === 'hourlyToAnnual') {
-                result = `$${(hourlyRate * workHours).toLocaleString()}`;
+                result = (hourlyRate * workHours).toLocaleString();
             } else {
-                result = `$${(hourlyRate / workHours).toFixed(2)}`;
+                result = (hourlyRate / workHours).toFixed(2);
             }
-            document.getElementById('result').textContent = mode === 'hourlyToAnnual' ? `💰 Annual Value: ${result}` : `💵 Hourly Rate: ${result}`;
+            document.getElementById('result').textContent = mode === 'hourlyToAnnual' ? `💰 Annual Value: ${currencySymbol}${result}` : `💵 Hourly Rate: ${currencySymbol}${result}`;
             document.getElementById('billableHours').textContent = `🕒 Monthly Billable Hours: ${monthlyHours} hrs`;
         });
     </script>
