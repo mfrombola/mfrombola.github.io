@@ -44,19 +44,7 @@
             <button id="annualToHourly" class="bg-white text-purple-800 border border-purple-800 py-2 px-6 rounded-full font-bold shadow-md">📅 Annual to Hourly</button>
         </div>
         <div id="inputFields" class="space-y-4">
-            <label for="currency" class="block text-sm font-bold text-gray-700">💲 Select Currency:</label>
-            <select id="currency" class="w-full p-3 rounded-full border border-purple-800 text-gray-800">
-                <option value="$">USD ($)</option>
-                <option value="€">EUR (€)</option>
-                <option value="£">GBP (£)</option>
-                <option value="¥">JPY (¥)</option>
-                <option value="R$">BRL (R$)</option>
-                <option value="₹">INR (₹)</option>
-                <option value="C$">CAD (C$)</option>
-                <option value="AU$">AUD (AU$)</option>
-                <option value="CHF">CHF (CHF)</option>
-                <option value="¥">CNY (¥)</option>
-            </select>
+            
             <input id="hourlyRate" placeholder="💵 Hourly Rate (e.g. 20)" class="w-full p-3 rounded-full border border-purple-800 text-gray-800" />
             <input id="vacationDays" placeholder="🏖️ Vacation Days (e.g. 20)" class="w-full p-3 rounded-full border border-purple-800 text-gray-800" />
             <button id="calculate" class="w-full bg-purple-800 text-white py-3 rounded-full font-bold shadow-md">🔄 Calculate</button>
@@ -100,16 +88,17 @@
             const vacationDays = parseFloat(document.getElementById('vacationDays').value) || 0;
             const workHours = 2080 - (vacationDays * 8);
             const monthlyHours = Math.ceil(workHours / 12);
-            const currencySymbol = document.getElementById('currency').value;
+            const currencySymbol = '€';
             let result = '';
             if (mode === 'hourlyToAnnual') {
                 result = (hourlyRate * workHours).toLocaleString();
             } else {
                 result = (hourlyRate / workHours).toFixed(2);
             }
-            document.getElementById('result').textContent = mode === 'hourlyToAnnual' ? `💰 Annual Value: ${currencySymbol}${result}` : `💵 Hourly Rate: ${currencySymbol}${result}`;
+            document.getElementById('result').textContent = mode === 'hourlyToAnnual' ? `💰 Annual Value: €${result}` : `💵 Hourly Rate: €${result}`;
             document.getElementById('billableHours').textContent = `🕒 Monthly Billable Hours: ${monthlyHours} hrs`;
         });
     </script>
 </body>
 </html>
+
